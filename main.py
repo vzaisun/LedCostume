@@ -1,6 +1,19 @@
 from fastapi import FastAPI, HTTPException
 from firebase_admin import credentials, db, initialize_app
 from DataInput import DataInputMain
+from pydantic import BaseModel
+from fastapi.middleware.cors import CORSMiddleware
+
+
+
+# Configure CORS
+origins = [
+    "http://localhost:3000",
+    # Add other origins as needed
+]
+
+
+
 
 firebase_credentials = {
    "type": "service_account",
@@ -16,11 +29,14 @@ firebase_credentials = {
     "universe_domain": "googleapis.com"
 }
 
-# Initialize Firebase Admin SDK
+
 cred = credentials.Certificate(firebase_credentials)
 initialize_app(cred, {
     'databaseURL': 'https://ledcostume-da444-default-rtdb.asia-southeast1.firebasedatabase.app/'
 })
+
+class EffectInput(BaseModel):
+    new_data: str
 
 
 
@@ -36,21 +52,27 @@ def update_effect_data(new_data):
 
 app = FastAPI()
 
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
 @app.get("/root")
 async def root():
-    return str(get_effect_data())
-
+    return get_effect_data()
 
 @app.post("/add_effect")
-async def add_effect():
-    new_data = DataInputMain()
+async def add_effect(effect_input: EffectInput):
+    new_data = effect_input.new_data
+    print(new_data)
     existing_data = str(get_effect_data()) 
     
-    
-    updated_data = existing_data  + str(new_data)
+    updated_data = existing_data + str(new_data)
     
     # Update the effect data in the database
     update_effect_data(updated_data)
 
     return {"message": "Effect added successfully"}
-
