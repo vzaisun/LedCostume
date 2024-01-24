@@ -3,7 +3,7 @@ from firebase_admin import credentials, db, initialize_app
 from DataInput import DataInputMain
 
 # Initialize Firebase Admin SDK
-cred = credentials.Certificate("C:\\Users\\sgvij\\Downloads\\credentials.json")
+cred = credentials.Certificate("C:\Python\LEDCostume\LEDCostumeAPI\credentials.json")
 initialize_app(cred, {
     'databaseURL': 'https://ledcostume-da444-default-rtdb.asia-southeast1.firebasedatabase.app/'
 })
