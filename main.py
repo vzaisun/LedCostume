@@ -38,7 +38,7 @@ app = FastAPI()
 
 @app.get("/root")
 async def root():
-    return int(get_effect_data())
+    return str(get_effect_data())
 
 
 @app.post("/add_effect")
