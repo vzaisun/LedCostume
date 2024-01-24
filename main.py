@@ -9,10 +9,8 @@ from fastapi.middleware.cors import CORSMiddleware
 # Configure CORS
 origins = [
     "http://localhost:3000",
-    # Add other origins as needed
+    "https://color-picker-app-topaz.vercel.app",
 ]
-
-
 
 
 firebase_credentials = {
